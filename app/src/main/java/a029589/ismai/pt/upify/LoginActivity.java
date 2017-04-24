@@ -13,6 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.auth0.android.Auth0;
+import com.auth0.android.authentication.AuthenticationAPIClient;
+import com.auth0.android.authentication.AuthenticationException;
+import com.auth0.android.callback.BaseCallback;
+import com.auth0.android.result.Credentials;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
@@ -40,11 +46,12 @@ public class LoginActivity extends AppCompatActivity {
         _loginButton = (Button) findViewById(R.id.btn_login);
         _signupLink = (TextView) findViewById(R.id.link_signup);
 
+
         _loginButton.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                login();
+                loginAuth("auth1@auth.com","auth");
             }
         });
 
@@ -65,14 +72,38 @@ public class LoginActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
+    private void loginAuth(String email, String password) {
+        Auth0 auth0 = new Auth0("vu9M2y1kAHGRwbkUcE3wt4rLVe_iooqc", "spnkdev.eu.auth0.com");
+        AuthenticationAPIClient client = new AuthenticationAPIClient(auth0);
+
+        // proper login
+
+        String connectionName = "UpifyDatabase";
+        client.login(email, password, connectionName)
+                .start(new BaseCallback<Credentials, AuthenticationException>() {
+                    @Override
+                    public void onSuccess(Credentials payload) {
+                        // Store credentials
+                        // Navigate to your main activity
+                        Log.d(TAG, "Logged in with success");
+                        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                        startActivity(intent);
+                    }
+
+                    @Override
+                    public void onFailure(AuthenticationException error) {
+                        // Show error to user
+                    }
+                });
+    }
 
     public void login() {
         Log.d(TAG, "Login");
-
+/*
         if (!validate()) {
             onLoginFailed();
             return;
-        }
+        }*/
 
         _loginButton.setEnabled(false);
 
@@ -85,7 +116,7 @@ public class LoginActivity extends AppCompatActivity {
         String password = _passwordText.getText().toString();
 
         // TODO: Implement your own authentication logic here.
-
+        loginAuth(email,password);
         new android.os.Handler().postDelayed(
                 new Runnable() {
                     public void run() {

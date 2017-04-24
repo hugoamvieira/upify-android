@@ -5,6 +5,11 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string name="auth0_client_id">vu9M2y1kAHGRwbkUcE3wt4rLVe_iooqc</string>
+    <string name="auth0_domain">spnkdev.eu.auth0.com</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
 </resources>
