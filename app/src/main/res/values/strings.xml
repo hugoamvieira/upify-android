@@ -5,11 +5,20 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
-    <string name="auth0_client_id">vu9M2y1kAHGRwbkUcE3wt4rLVe_iooqc</string>
-    <string name="auth0_domain">spnkdev.eu.auth0.com</string>
-
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="welcome">Welcome To Your App</string>
+    <string name="please_login">or.. \nuse your email and password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_success">Login was successful</string>
+    <string name="webLogin">Login with Google</string>
+    <string name="dbLogin">Login with Upify Database</string>
+    <string name="login_again">Log In Again</string>
+
+    <string name="auth0_client_id">tG1h2Tq0GnJqfUU4KvXNTsKaaxI41vqb</string>
+    <string name="auth0_domain">spnkdev.eu.auth0.com</string>
 
 
 </resources>
