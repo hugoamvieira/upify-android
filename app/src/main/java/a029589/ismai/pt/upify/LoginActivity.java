@@ -45,7 +45,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //Show a progress dialog to block the UI while the request is being made.
-                login(emailEditText.getText().toString(), passwordEditText.getText().toString());
+                //login("auth2@auth.com", "auth");
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                //login(emailEditText.getText().toString(), passwordEditText.getText().toString());
             }
         });
         // Add the onClick listener to the web auth login
