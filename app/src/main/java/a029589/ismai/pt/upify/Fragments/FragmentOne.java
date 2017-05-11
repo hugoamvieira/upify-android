@@ -3,18 +3,19 @@ package a029589.ismai.pt.upify.Fragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
-import a029589.ismai.pt.upify.R;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
-import static a029589.ismai.pt.upify.R.id.textView;
+import a029589.ismai.pt.upify.R;
 
 
 public class FragmentOne extends Fragment {
@@ -24,12 +25,16 @@ public class FragmentOne extends Fragment {
         // Required empty public constructor
     }
 
-    ProgressBar levelbar;
+    ProgressBar experiencebar;
     ProgressBar friendlybar;
     ProgressBar helpfulbar;
     ProgressBar socialbar;
-    private int progressStatus = 0;
-    private Handler handler = new Handler();
+    private int experiencebarProgressStatus = 0;
+    private int remainingProgressStatus = 0;
+    private int avatarLevelProgressStatus = 0;
+    private Handler handlerexperiencebar = new Handler();
+    private Handler handlerexperienceleft = new Handler();
+    private Handler handleravatarlevel = new Handler();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,22 +42,30 @@ public class FragmentOne extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_one, container, false);
 
-         levelbar = (ProgressBar)view.findViewById(R.id.levelbar);
+        experiencebar = (ProgressBar)view.findViewById(R.id.experiencebar);
+        final TextView experienceleft = (TextView)view.findViewById(R.id.experienceleft);
+        final TextView avatarLevel = (TextView)view.findViewById(R.id.avatarlevel);
         Button btn25 = (Button)view.findViewById(R.id.button);
         Button btn100 = (Button)view.findViewById(R.id.button2);
 
 
         SetCircleBarOptions(view);
 
-        //Long operation by thread
+        //Thread for slow progress bar
         new Thread(new Runnable() {
             public void run() {
-                while (progressStatus < 40) {
-                    progressStatus += 1;
+
+                Double currentexp =600.0;
+                Double totalxp= 2100.0;
+                Double result = (currentexp/totalxp)*100;
+
+                while (experiencebarProgressStatus < round(result,0)){
+                    experiencebarProgressStatus += 1;
                     //Update progress bar with completion of operation
-                    handler.post(new Runnable() {
+                    handlerexperiencebar.post(new Runnable() {
                         public void run() {
-                            levelbar.setProgress(progressStatus);
+                            experiencebar.setProgress(experiencebarProgressStatus);
+                           // experienceleft.setText((experiencebarProgressStatus*10)+"/"+"2100 XP");
                         }
                     });
                     try {
@@ -66,16 +79,67 @@ public class FragmentOne extends Fragment {
             }
         }).start();
 
+        //Thread for slow count of XP
+        new Thread(new Runnable() {
+            public void run() {
+
+                Integer currentexp =600;
+                final Integer totalxp= 2100;
+
+                while (remainingProgressStatus< currentexp) {
+                    remainingProgressStatus += 20;
+                    //Update progress bar with completion of operation
+                    handlerexperienceleft.post(new Runnable() {
+                        public void run() {
+                            experienceleft.setText(remainingProgressStatus+"/"+totalxp+" XP");
+                        }
+                    });
+                    try {
+                        // Sleep for 200 milliseconds.
+                        //Just to display the progress slowly
+                        Thread.sleep(30);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
+        //Thread for slow count of user level
+        new Thread(new Runnable() {
+            public void run() {
+
+                final Integer currentLevel =20;
+
+                while (avatarLevelProgressStatus< currentLevel) {
+                    avatarLevelProgressStatus += 1;
+                    //Update progress bar with completion of operation
+                    handleravatarlevel.post(new Runnable() {
+                        public void run() {
+                            avatarLevel.setText(avatarLevelProgressStatus+"");
+                        }
+                    });
+                    try {
+                        // Sleep for 200 milliseconds.
+                        //Just to display the progress slowly
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+
         btn25.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                levelbar.setProgress(25);
+                experiencebar.setProgress(25);
             }
         });
         btn100.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                levelbar.setProgress(100);
+                experiencebar.setProgress(100);
             }
         });
         return  view;
@@ -93,6 +157,14 @@ public class FragmentOne extends Fragment {
         circularSocialBar.setProgressWithAnimation(25, animationDuration);
         circularHelpfulBar.setProgressWithAnimation(55, animationDuration);
 
+    }
+
+    public static double round(double value, int places) {
+        if (places < 0) throw new IllegalArgumentException();
+
+        BigDecimal bd = new BigDecimal(value);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
     }
 
 }
