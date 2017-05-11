@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.auth0.android.Auth0;
@@ -23,11 +22,13 @@ import com.auth0.android.provider.AuthCallback;
 import com.auth0.android.provider.WebAuthProvider;
 import com.auth0.android.result.Credentials;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
 
 public class LoginActivity extends AppCompatActivity {
+    private static final String TAG = "Upify";
+
     private ProgressDialog progress;
+    private Context context = this;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,17 +61,9 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        //Check if the result belongs to a pending web authentication
-        if (WebAuthProvider.resume(intent)) {
-            return;
-        }
-        super.onNewIntent(intent);
-    }
 
     private void login(String email, String password) {
-        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
+        Auth0 auth0 = new Auth0(context);
         AuthenticationAPIClient client = new AuthenticationAPIClient(auth0);
 
         progress = ProgressDialog.show(this, null, "Logging in..", true, false);
@@ -82,7 +75,7 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Credentials payload) {
                         progress.dismiss();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        changeActivity(context, MainActivity.class);
                         finish();
                     }
 
@@ -100,31 +93,47 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+
     private void loginGoogle() {
-        Auth0 auth0 = new Auth0(getString(R.string.auth0_client_id), getString(R.string.auth0_domain));
-        WebAuthProvider.init(auth0)
+        Auth0 acc = new Auth0(context);
+
+        final AuthCallback callback = new AuthCallback() {
+            @Override
+            public void onFailure(@NonNull Dialog dialog) {
+                Log.d(TAG, "Unknown Error");
+                dialog.show();
+            }
+
+            @Override
+            public void onFailure(AuthenticationException exception) {
+                Log.d(TAG, "Auth Error");
+            }
+
+            @Override
+            public void onSuccess(@NonNull Credentials credentials) {
+                Log.d(TAG, "Succes" + credentials.getAccessToken());
+                changeActivity(context, MainActivity.class);
+            }
+        };
+
+        WebAuthProvider.init(acc)
                 .withConnection("google-oauth2")
-                .start(LoginActivity.this, new AuthCallback() {
-                    @Override
-                    public void onFailure(@NonNull Dialog dialog) {
-                        dialog.show();
-                    }
+                .start(LoginActivity.this, callback);
+    }
 
-                    @Override
-                    public void onFailure(final AuthenticationException exception) {
-                        //Show error to the user
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(LoginActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
 
-                    @Override
-                    public void onSuccess(@NonNull Credentials credentials) {
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                    }
-                });
+    private void changeActivity(Context ctx, Class<?> cls) {
+        Intent i = new Intent(ctx, cls);
+        startActivity(i);
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        //Check if the result belongs to a pending web authentication
+        if (WebAuthProvider.resume(intent)) {
+            return;
+        }
+        super.onNewIntent(intent);
     }
 }
