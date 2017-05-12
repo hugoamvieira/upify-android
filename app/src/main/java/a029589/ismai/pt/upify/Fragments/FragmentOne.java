@@ -3,6 +3,7 @@ package a029589.ismai.pt.upify.Fragments;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,8 +15,15 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
 
+import a029589.ismai.pt.upify.CustomCard;
 import a029589.ismai.pt.upify.R;
+import it.gmariotti.cardslib.library.internal.Card;
+import it.gmariotti.cardslib.library.internal.CardHeader;
+import it.gmariotti.cardslib.library.recyclerview.internal.CardArrayRecyclerViewAdapter;
+import it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView;
+import it.gmariotti.cardslib.library.view.CardViewNative;
 
 
 public class FragmentOne extends Fragment {
@@ -129,6 +137,39 @@ public class FragmentOne extends Fragment {
                 }
             }
         }).start();
+
+
+
+        ArrayList<Card> cards = new ArrayList<Card>();
+
+        //Create a Card
+        Card card = new CustomCard(getContext());
+
+
+        //Create a CardHeader
+        //CardHeader header = new CardHeader(getContext());
+        //Add Header to card
+        //card.addCardHeader(header);
+        //card.setTitle("hello fam");
+
+        cards.add(card);
+        cards.add(card);
+        cards.add(card);
+        cards.add(card);
+        cards.add(card);
+
+        CardArrayRecyclerViewAdapter mCardArrayAdapter = new CardArrayRecyclerViewAdapter(getActivity(), cards);
+
+        //Staggered grid view
+        CardRecyclerView mRecyclerView = (CardRecyclerView)view.findViewById(R.id.carddemo_recyclerview);
+        mRecyclerView.setHasFixedSize(false);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        //Set the empty view
+        if (mRecyclerView != null) {
+            mRecyclerView.setAdapter(mCardArrayAdapter);
+        }
+
 
         btn25.setOnClickListener(new View.OnClickListener() {
             @Override
