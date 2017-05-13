@@ -79,7 +79,7 @@ public class FragmentOne extends Fragment {
                     try {
                         // Sleep for 200 milliseconds.
                         //Just to display the progress slowly
-                        Thread.sleep(30);
+                        Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -206,6 +206,16 @@ public class FragmentOne extends Fragment {
         BigDecimal bd = new BigDecimal(value);
         bd = bd.setScale(places, RoundingMode.HALF_UP);
         return bd.doubleValue();
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+        if (isVisibleToUser) {
+        }
+        else {
+        }
     }
 
 }

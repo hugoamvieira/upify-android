@@ -1,13 +1,28 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:card="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="a029589.ismai.pt.upify.Fragments.FragmentTwo">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <it.gmariotti.cardslib.library.recyclerview.view.CardRecyclerView
+        android:id="@+id/carddemo_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/title_dashboard" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        card:layout_constraintBottom_toBottomOf="parent"
+        card:layout_constraintHorizontal_bias="0.0"
+        card:layout_constraintLeft_toLeftOf="parent"
+        card:layout_constraintRight_toRightOf="parent"
+        card:layout_constraintTop_toTopOf="parent"
+        card:layout_constraintVertical_bias="0.0"
+        card:list_card_layout_resourceID="@layout/native_recyclerview_card_layout"/>
 
-</FrameLayout>
+
+
+
+</android.support.constraint.ConstraintLayout>
