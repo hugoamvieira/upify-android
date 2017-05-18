@@ -49,6 +49,8 @@ public class FragmentOne extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_one, container, false);
+        String user_email = getActivity().getIntent().getExtras().getString("user_email");
+
 
         experiencebar = (ProgressBar)view.findViewById(R.id.experiencebar);
         final TextView experienceleft = (TextView)view.findViewById(R.id.experienceleft);
@@ -217,5 +219,7 @@ public class FragmentOne extends Fragment {
         else {
         }
     }
+
+
 
 }
