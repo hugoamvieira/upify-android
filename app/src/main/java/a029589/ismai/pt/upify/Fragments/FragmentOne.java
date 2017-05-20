@@ -16,9 +16,12 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import a029589.ismai.pt.upify.CustomCard;
+import a029589.ismai.pt.upify.DBUserData;
 import a029589.ismai.pt.upify.R;
+import a029589.ismai.pt.upify.User;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
 import it.gmariotti.cardslib.library.recyclerview.internal.CardArrayRecyclerViewAdapter;
@@ -33,6 +36,7 @@ public class FragmentOne extends Fragment {
         // Required empty public constructor
     }
 
+    DBUserData dbuser;
     ProgressBar experiencebar;
     ProgressBar friendlybar;
     ProgressBar helpfulbar;
@@ -43,6 +47,7 @@ public class FragmentOne extends Fragment {
     private Handler handlerexperiencebar = new Handler();
     private Handler handlerexperienceleft = new Handler();
     private Handler handleravatarlevel = new Handler();
+    User user;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,12 +56,25 @@ public class FragmentOne extends Fragment {
         View view = inflater.inflate(R.layout.fragment_one, container, false);
         String user_email = getActivity().getIntent().getExtras().getString("user_email");
 
-
+        dbuser = new DBUserData(user_email);
         experiencebar = (ProgressBar)view.findViewById(R.id.experiencebar);
+        final TextView username = (TextView)view.findViewById(R.id.username);
         final TextView experienceleft = (TextView)view.findViewById(R.id.experienceleft);
         final TextView avatarLevel = (TextView)view.findViewById(R.id.avatarlevel);
         Button btn25 = (Button)view.findViewById(R.id.button);
         Button btn100 = (Button)view.findViewById(R.id.button2);
+
+        String  temp="";
+        try {
+            user = dbuser.execute().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
+        username.setText(user.getName());
 
 
         SetCircleBarOptions(view);
