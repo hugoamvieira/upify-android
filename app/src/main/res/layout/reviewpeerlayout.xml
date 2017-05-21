@@ -64,6 +64,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
+        android:progressTint="#ff9e30"
         app:layout_constraintBottom_toTopOf="@+id/hashtagbutton"
         app:layout_constraintHorizontal_bias="0.029"
         app:layout_constraintLeft_toRightOf="@+id/useravatarborder"
@@ -72,7 +73,7 @@
         app:layout_constraintVertical_bias="0.0"/>
 
     <Button
-        android:id="@+id/hashtagbutton"
+        android:id="@+id/hashtagfriendly"
         android:layout_width="59dp"
         android:layout_height="18dp"
         android:layout_marginLeft="8dp"
@@ -92,6 +93,50 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.506"
         tools:text="#friendly"/>
+
+    <Button
+        android:id="@+id/hashtagsocial"
+        android:layout_width="59dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/hashtagbackground"
+        android:backgroundTint="#ff9e30"
+        android:fontFamily="casual"
+        android:text="Button"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintLeft_toRightOf="@+id/useravatarborder"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.506"
+        tools:text="#social"/>
+
+    <Button
+        android:id="@+id/hashtaghelpful"
+        android:layout_width="59dp"
+        android:layout_height="18dp"
+        android:layout_marginLeft="8dp"
+        android:background="@drawable/hashtagbackground"
+        android:backgroundTint="#08b263"
+        android:fontFamily="casual"
+        android:text="Button"
+        android:textAlignment="center"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.079"
+        app:layout_constraintLeft_toRightOf="@+id/useravatarborder"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.506"
+        tools:text="#helpful"/>
 
     <TextView
         android:id="@+id/userlevel"

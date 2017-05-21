@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,12 +16,16 @@ import com.mikhaellopez.circularprogressbar.CircularProgressBar;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import a029589.ismai.pt.upify.CustomCard;
+import a029589.ismai.pt.upify.DBReviewData;
 import a029589.ismai.pt.upify.DBUserData;
 import a029589.ismai.pt.upify.R;
+import a029589.ismai.pt.upify.Review;
 import a029589.ismai.pt.upify.User;
 import it.gmariotti.cardslib.library.internal.Card;
 import it.gmariotti.cardslib.library.internal.CardHeader;
@@ -37,6 +42,7 @@ public class FragmentOne extends Fragment {
     }
 
     DBUserData dbuser;
+    DBReviewData dbreview;
     ProgressBar experiencebar;
     ProgressBar friendlybar;
     ProgressBar helpfulbar;
@@ -57,10 +63,16 @@ public class FragmentOne extends Fragment {
         String user_email = getActivity().getIntent().getExtras().getString("user_email");
 
         dbuser = new DBUserData(user_email);
+
         experiencebar = (ProgressBar)view.findViewById(R.id.experiencebar);
         final TextView username = (TextView)view.findViewById(R.id.username);
         final TextView experienceleft = (TextView)view.findViewById(R.id.experienceleft);
         final TextView avatarLevel = (TextView)view.findViewById(R.id.avatarlevel);
+        final TextView currentleveltextview = (TextView)view.findViewById(R.id.currentlevel);
+        final TextView nextleveltextview = (TextView)view.findViewById(R.id.nextlevel);
+        final TextView socialcounttextview = (TextView)view.findViewById(R.id.socialcounttext);
+        final TextView helpfulcounttextview = (TextView)view.findViewById(R.id.helpfulcounttext);
+        final TextView friendlycounttextview = (TextView)view.findViewById(R.id.friendlycounttext);
         Button btn25 = (Button)view.findViewById(R.id.button);
         Button btn100 = (Button)view.findViewById(R.id.button2);
 
@@ -73,18 +85,28 @@ public class FragmentOne extends Fragment {
             e.printStackTrace();
         }
 
-
+        NumberFormat format = new DecimalFormat("0.#");
         username.setText(user.getName());
+        currentleveltextview.setText(format.format(user.getLevel())+"");
+        nextleveltextview.setText(format.format(user.getLevel()+1)+"");
+        socialcounttextview.setText(user.getOrange_medals()+"");
+        friendlycounttextview.setText(user.getPurple_medals()+"");
+        helpfulcounttextview.setText(user.getGreen_medals()+"");
+
+
 
 
         SetCircleBarOptions(view);
+
+
+
 
         //Thread for slow progress bar
         new Thread(new Runnable() {
             public void run() {
 
-                Double currentexp =600.0;
-                Double totalxp= 2100.0;
+                Double currentexp =user.getExperience();
+                Double totalxp= (user.getLevel()+1)*100;
                 Double result = (currentexp/totalxp)*100;
 
                 while (experiencebarProgressStatus < round(result,0)){
@@ -111,8 +133,8 @@ public class FragmentOne extends Fragment {
         new Thread(new Runnable() {
             public void run() {
 
-                Integer currentexp =600;
-                final Integer totalxp= 2100;
+                Double currentexp =user.getExperience();
+                final Double totalxp= (user.getLevel()+1)*100;
 
                 while (remainingProgressStatus< currentexp) {
                     remainingProgressStatus += 20;
@@ -125,7 +147,7 @@ public class FragmentOne extends Fragment {
                     try {
                         // Sleep for 200 milliseconds.
                         //Just to display the progress slowly
-                        Thread.sleep(30);
+                        Thread.sleep(150);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -137,9 +159,9 @@ public class FragmentOne extends Fragment {
         new Thread(new Runnable() {
             public void run() {
 
-                final Integer currentLevel =20;
+                //final Double totalxp= user.getLevel()*100;
 
-                while (avatarLevelProgressStatus< currentLevel) {
+                while (avatarLevelProgressStatus< user.getLevel()) {
                     avatarLevelProgressStatus += 1;
                     //Update progress bar with completion of operation
                     handleravatarlevel.post(new Runnable() {
@@ -150,7 +172,7 @@ public class FragmentOne extends Fragment {
                     try {
                         // Sleep for 200 milliseconds.
                         //Just to display the progress slowly
-                        Thread.sleep(100);
+                        Thread.sleep(200);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -159,11 +181,29 @@ public class FragmentOne extends Fragment {
         }).start();
 
 
+        dbreview = new DBReviewData(user.getId());
 
         ArrayList<Card> cards = new ArrayList<Card>();
 
+        try {
+            final  Review[]  reviews = dbreview.execute().get();
+
+            for (Review r: reviews){
+                Log.d(r.getGivenby_userid()+"",r.getStar_amount()+"");
+                Card card = new CustomCard(getContext(),r);
+                cards.add(card);
+
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        //ArrayList<Card> cards = new ArrayList<Card>();
+
         //Create a Card
-        Card card = new CustomCard(getContext());
+       // Card card = new CustomCard(getContext());
 
 
         //Create a CardHeader
@@ -171,12 +211,12 @@ public class FragmentOne extends Fragment {
         //Add Header to card
         //card.addCardHeader(header);
         //card.setTitle("hello fam");
-
+/*
         cards.add(card);
         cards.add(card);
         cards.add(card);
         cards.add(card);
-        cards.add(card);
+        cards.add(card);*/
 
         CardArrayRecyclerViewAdapter mCardArrayAdapter = new CardArrayRecyclerViewAdapter(getActivity(), cards);
 

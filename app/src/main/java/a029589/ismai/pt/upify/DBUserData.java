@@ -18,10 +18,10 @@ import java.util.Collection;
 
 public class DBUserData extends AsyncTask<User,Void,User> {
 
-    String useremail;
+    String useremail_or_id;
 
-    public DBUserData(String useremail) {
-        this.useremail = useremail;
+    public DBUserData(String useremail_or_id) {
+        this.useremail_or_id = useremail_or_id;
     }
 
     @Override
@@ -30,7 +30,7 @@ public class DBUserData extends AsyncTask<User,Void,User> {
         OkHttpClient client= new OkHttpClient();
         try {
            Request request = new Request.Builder()
-                   .url("http://138.68.170.71:3000/users/"+useremail)
+                   .url("http://138.68.170.71:3000/users/"+useremail_or_id)
                    .build();
 
             Response response = client.newCall(request).execute();
