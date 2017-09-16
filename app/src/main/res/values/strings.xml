@@ -2,9 +2,23 @@
     <string name="app_name">Upify</string>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_dashboard">Team</string>
     <string name="title_notifications">Notifications</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="welcome">Welcome To Your App</string>
+    <string name="please_login">or.. \nuse your email and password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login_success">Login was successful</string>
+    <string name="webLogin">Login with Google</string>
+    <string name="dbLogin">Login with Upify Database</string>
+    <string name="login_again">Log In Again</string>
+
+    <string name="com_auth0_client_id">tG1h2Tq0GnJqfUU4KvXNTsKaaxI41vqb</string>
+    <string name="com_auth0_domain">spnkdev.eu.auth0.com</string>
+
+
 </resources>
